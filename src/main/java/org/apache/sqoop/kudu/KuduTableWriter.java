@@ -235,13 +235,22 @@ public class KuduTableWriter {
             + " is marked as key column");
       }
 
-
-      ColumnSchema columnSchema = new ColumnSchema
-          .ColumnSchemaBuilder(col, kuduColType)
-          .key(isKeyColumn)
-          .nullable(isNullable)
-          .build();
-      columns.add(columnSchema);
+      if(isKeyColumn){
+    	  ColumnSchema columnSchema = new ColumnSchema
+    	          .ColumnSchemaBuilder(col, kuduColType)
+    	          .key(isKeyColumn)
+    	          .nullable(isNullable)
+    	          .build();
+    	      columns.add(0,columnSchema);
+      }else{
+    	  ColumnSchema columnSchema = new ColumnSchema
+    	          .ColumnSchemaBuilder(col, kuduColType)
+    	          .key(isKeyColumn)
+    	          .nullable(isNullable)
+    	          .build();
+    	      columns.add(columnSchema);
+      }
+      
     }
 
     return new Schema(columns);

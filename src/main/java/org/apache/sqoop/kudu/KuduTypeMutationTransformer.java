@@ -19,6 +19,7 @@
 package org.apache.sqoop.kudu;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -77,6 +78,7 @@ public class KuduTypeMutationTransformer extends MutationTransformer {
       Type columnType = columnTypeMap.get(colName);
       Object val = fieldEntry.getValue();
 
+       
 
       switch (columnType.getName()) {
         case "binary":
@@ -86,19 +88,24 @@ public class KuduTypeMutationTransformer extends MutationTransformer {
           row.addBoolean(colName, (boolean) val);
           break;
         case "double":
-          row.addDouble(colName, (Double) val);
+        	if( val instanceof java.math.BigDecimal){
+        		   row.addDouble(colName, val==null?0.0:((java.math.BigDecimal) val).doubleValue());
+        	}else{
+        		   row.addDouble(colName, val==null?0.0:(Double) val);
+        	}
+       
           break;
         case "float":
-          row.addFloat(colName, (Float) val);
+          row.addFloat(colName, val==null?0.0f:(Float) val);
           break;
         case "int8":
         case "int16":
         case "int32":
         case "int64":
-          row.addInt(colName, (int) val);
+          row.addInt(colName, val==null?0:(int) val);
           break;
         case "string":
-          row.addString(colName, val.toString());
+          row.addString(colName, String.valueOf(val));
           break;
         case "timestamp":
           row.addLong(colName, ((java.sql.Timestamp) val).getTime());
