@@ -101,9 +101,19 @@ public class KuduTypeMutationTransformer extends MutationTransformer {
         case "int8":
         case "int16":
         case "int32":
+        	if(val ==null){ val=0;};
+            if(val instanceof java.lang.Long) {
+  			Integer intVal = ((java.lang.Long) val).intValue();
+  	        row.addInt(colName, intVal);
+  		  }else{
+  			  row.addInt(colName, val==null?0:(int) val);
+  			  
+  		  }
+            break;
         case "int64":
-          row.addInt(colName, val==null?0:(int) val);
-          break;
+        	if(val ==null){ val=0L;};
+  	        row.addLong(colName, (Long)val);
+            break;
         case "string":
           row.addString(colName, String.valueOf(val));
           break;
