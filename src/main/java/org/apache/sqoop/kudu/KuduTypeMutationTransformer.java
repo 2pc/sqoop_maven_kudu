@@ -121,7 +121,6 @@ public class KuduTypeMutationTransformer extends MutationTransformer {
           break;
         case "unixtime_micros":
           if(val!=null){
-        	  ((java.sql.Timestamp)val).getTime();
         	  row.addLong(colName, ((java.sql.Timestamp) val).getTime()*1000);
           }else{
         	  LOG.error("unixtime_micros colName: "+colName+ "val: "+val );
