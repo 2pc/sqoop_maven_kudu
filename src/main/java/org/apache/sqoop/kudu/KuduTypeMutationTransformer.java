@@ -20,6 +20,8 @@ package org.apache.sqoop.kudu;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.Clob;
+import java.sql.Time;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -101,12 +103,12 @@ public class KuduTypeMutationTransformer extends MutationTransformer {
         case "int8":
         case "int16":
         case "int32":
-        	if(val ==null){ val=0;};
+        	if(val ==null){ val=0;}
             if(val instanceof java.lang.Long) {
   			Integer intVal = ((java.lang.Long) val).intValue();
   	        row.addInt(colName, intVal);
   		  }else{
-  			  row.addInt(colName, val==null?0:(int) val);
+  			row.addInt(colName, val==null?0:(int) val);
   			  
   		  }
             break;
@@ -118,16 +120,14 @@ public class KuduTypeMutationTransformer extends MutationTransformer {
           row.addString(colName, String.valueOf(val));
           break;
         case "unixtime_micros":
-        	  LOG.error("unixtime_micros colName: "+colName+ "val: "+val );
           if(val!=null){
-        	  LOG.error("unixtime_micros colName: "+colName+ "val: "+((java.sql.Timestamp) val).getTime() );
+        	  ((java.sql.Timestamp)val).getTime();
         	  row.addLong(colName, ((java.sql.Timestamp) val).getTime()*1000);
           }else{
         	  LOG.error("unixtime_micros colName: "+colName+ "val: "+val );
           }
           break;
         case "timestamp":
-        	LOG.info("colName: "+colName+ "val: "+val );
           row.addLong(colName, ((java.sql.Timestamp) val).getTime());
           break;
         default:
